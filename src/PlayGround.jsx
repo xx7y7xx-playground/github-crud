@@ -43,14 +43,13 @@ export default class PlayGround extends React.Component {
   state = {
     value: "",
   };
+  octokit = new Octokit({
+    auth: localStorage.getItem("github_personal_token"),
+  });
   handleChange = (event) => {
     this.state({ value: event.target.value });
   };
   handleClick = async () => {
-    const octokit = new Octokit({
-      auth: localStorage.getItem("github_personal_token"),
-    });
-
     const contentEncoded = Base64.encode("test2");
 
     const config = {
@@ -69,20 +68,35 @@ export default class PlayGround extends React.Component {
         email: "your-email",
       },
     };
-    if (fileExist(octokit, path)) {
-      const sha = await getSHA(octokit, path);
+    if (fileExist(this.octokit, path)) {
+      const sha = await getSHA(this.octokit, path);
       console.log("sha", sha);
       config.sha = sha;
     }
-    const { data } = await octokit.repos.createOrUpdateFileContents(config);
+    const { data } = await this.octokit.repos.createOrUpdateFileContents(
+      config
+    );
 
-    console.log(data);
+    console.log("data:", data);
+  };
+  getContent = async () => {
+    const { data } = await this.octokit.repos.getContent({
+      owner,
+      repo,
+      path: "dir",
+    });
+    console.log("data:", data);
   };
   render() {
     return (
       <div>
         <input value={this.state.value} onChange={this.handleChange}></input>
-        <button onClick={this.handleClick}>Save</button>
+        <div>
+          <button onClick={this.handleClick}>createOrUpdateFileContents</button>
+        </div>
+        <div>
+          <button onClick={this.getContent}>list files in dir</button>
+        </div>
       </div>
     );
   }
