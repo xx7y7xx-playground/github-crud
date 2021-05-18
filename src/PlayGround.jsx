@@ -34,6 +34,11 @@ export default class PlayGround extends React.Component {
             GitHub_REST_API.getContent
           </button>
         </div>
+        <div>
+          <button onClick={this.githubHelpers.createOrUpdateFileContents}>
+            GitHub_REST_API.createOrUpdateFileContents
+          </button>
+        </div>
       </div>
     );
   }
