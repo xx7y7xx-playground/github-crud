@@ -1,6 +1,10 @@
 import { Octokit } from "@octokit/rest";
 import { Base64 } from "js-base64";
 
+/**
+ * https://octokit.github.io/rest.js/v18/
+ */
+
 const makeHelpers = () => {
   const owner = "d3vinc-playground";
   const repo = "tmp";
